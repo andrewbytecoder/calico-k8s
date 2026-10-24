@@ -52,6 +52,29 @@ topology:
         - "ip addr add dev eth1 10.30.30.100/24"
         - "ip route add 172.16.0.0/16 via 10.30.30.1"
 
+    # Webtop desktop host on VLAN 30 (HTTP: 3000, HTTPS: 3001)
+    #
+    # containerlab starts linux nodes with privileged=true by default, which exposes the
+    # host /dev/dri (Intel i915) into the container. webtop's AUTO_GPU then picks the VAAPI
+    # hardware encoder ("Encoder: VAAPI H264 ... i915 driver"), whose H264 stream renders
+    # as a BLACK SCREEN in the browser. privileged=false matches a plain `docker run`
+    # (no /dev/dri visible) so webtop falls back to software x264 encoding, which works.
+    # NET_ADMIN is required so the exec hooks below can configure eth1.
+    # shm-size must also be raised from the default 64MB or Xorg will crash.
+    ubuntu:
+      kind: linux
+      image: lscr.io/linuxserver/webtop:ubuntu-xfce
+      ports:
+        - 3000:3000
+        - 3001:3001
+      shm-size: 2gb
+      privileged: false
+      cap-add:
+        - NET_ADMIN
+      exec:
+        - "ip addr add dev eth1 10.30.30.101/24"
+        - "ip route add 172.16.0.0/16 via 10.30.30.1"
+
   links:
     # All K8s nodes connected to ToR in VLAN 10
     - endpoints: ["ceos01:eth1", "k01-control-plane:eth1"]
@@ -61,4 +84,5 @@ topology:
     - endpoints: ["ceos01:eth5", "k01-worker4:eth1"]
     # User host connected to ToR in VLAN 30
     - endpoints: ["ceos01:eth6", "user:eth1"]
+    - endpoints: ["ceos01:eth7", "ubuntu:eth1"]
 
