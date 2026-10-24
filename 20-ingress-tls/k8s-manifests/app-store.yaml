@@ -1,0 +1,150 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: store-html
+  namespace: cert-manager-demo
+data:
+  index.html: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\"\
+    >\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+    >\n    <title>Demo Store | Secure Shopping</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap\"\
+    \ rel=\"stylesheet\">\n    <style>\n        * { margin: 0; padding: 0; box-sizing:\
+    \ border-box; }\n        \n        body { \n            font-family: 'Outfit',\
+    \ sans-serif;\n            min-height: 100vh;\n            background: linear-gradient(135deg,\
+    \ #0f0f23 0%, #1a1a3e 50%, #2d1b4e 100%);\n            color: #e8e8f0;\n     \
+    \       overflow-x: hidden;\n        }\n        \n        .background-pattern\
+    \ {\n            position: fixed;\n            top: 0;\n            left: 0;\n\
+    \            width: 100%;\n            height: 100%;\n            background-image:\
+    \ \n                radial-gradient(circle at 20% 80%, rgba(120, 80, 220, 0.15)\
+    \ 0%, transparent 50%),\n                radial-gradient(circle at 80% 20%, rgba(60,\
+    \ 180, 220, 0.1) 0%, transparent 50%),\n                repeating-linear-gradient(\n\
+    \                    0deg,\n                    transparent,\n               \
+    \     transparent 50px,\n                    rgba(255,255,255,0.02) 50px,\n  \
+    \                  rgba(255,255,255,0.02) 51px\n                );\n         \
+    \   pointer-events: none;\n            z-index: 0;\n        }\n        \n    \
+    \    .container {\n            position: relative;\n            z-index: 1;\n\
+    \            max-width: 900px;\n            margin: 0 auto;\n            padding:\
+    \ 60px 30px;\n            text-align: center;\n        }\n        \n        .lock-icon\
+    \ {\n            width: 80px;\n            height: 80px;\n            margin:\
+    \ 0 auto 30px;\n            background: linear-gradient(135deg, #4ade80, #22d3ee);\n\
+    \            border-radius: 20px;\n            display: flex;\n            align-items:\
+    \ center;\n            justify-content: center;\n            font-size: 40px;\n\
+    \            box-shadow: 0 10px 40px rgba(74, 222, 128, 0.3);\n            animation:\
+    \ float 3s ease-in-out infinite;\n        }\n        \n        @keyframes float\
+    \ {\n            0%, 100% { transform: translateY(0); }\n            50% { transform:\
+    \ translateY(-10px); }\n        }\n        \n        h1 {\n            font-size:\
+    \ 3.5rem;\n            font-weight: 700;\n            margin-bottom: 15px;\n \
+    \           background: linear-gradient(90deg, #fff, #a78bfa);\n            -webkit-background-clip:\
+    \ text;\n            -webkit-text-fill-color: transparent;\n            background-clip:\
+    \ text;\n        }\n        \n        .tagline {\n            font-size: 1.3rem;\n\
+    \            color: #a5a5c0;\n            margin-bottom: 40px;\n            font-weight:\
+    \ 300;\n        }\n        \n        .cert-badge {\n            display: inline-flex;\n\
+    \            align-items: center;\n            gap: 12px;\n            background:\
+    \ rgba(74, 222, 128, 0.15);\n            border: 1px solid rgba(74, 222, 128,\
+    \ 0.3);\n            padding: 15px 30px;\n            border-radius: 50px;\n \
+    \           margin-bottom: 50px;\n        }\n        \n        .cert-badge .icon\
+    \ { font-size: 24px; }\n        .cert-badge .text { font-weight: 600; color: #4ade80;\
+    \ }\n        .cert-badge .subtext { font-size: 0.85rem; color: #86efac; }\n  \
+    \      \n        .info-grid {\n            display: grid;\n            grid-template-columns:\
+    \ repeat(auto-fit, minmax(250px, 1fr));\n            gap: 25px;\n            margin-bottom:\
+    \ 50px;\n        }\n        \n        .info-card {\n            background: rgba(255,255,255,0.05);\n\
+    \            border: 1px solid rgba(255,255,255,0.1);\n            border-radius:\
+    \ 16px;\n            padding: 30px;\n            backdrop-filter: blur(10px);\n\
+    \            transition: transform 0.3s, box-shadow 0.3s;\n        }\n       \
+    \ \n        .info-card:hover {\n            transform: translateY(-5px);\n   \
+    \         box-shadow: 0 20px 40px rgba(0,0,0,0.3);\n        }\n        \n    \
+    \    .info-card .label {\n            font-size: 0.8rem;\n            text-transform:\
+    \ uppercase;\n            letter-spacing: 2px;\n            color: #8b8ba7;\n\
+    \            margin-bottom: 10px;\n        }\n        \n        .info-card .value\
+    \ {\n            font-size: 1.1rem;\n            color: #fff;\n            font-family:\
+    \ 'Monaco', 'Consolas', monospace;\n            word-break: break-all;\n     \
+    \   }\n        \n        .wildcard-highlight {\n            background: linear-gradient(90deg,\
+    \ #f472b6, #c084fc);\n            -webkit-background-clip: text;\n           \
+    \ -webkit-text-fill-color: transparent;\n            background-clip: text;\n\
+    \            font-weight: 600;\n        }\n        \n        .footer {\n     \
+    \       margin-top: 40px;\n            padding-top: 30px;\n            border-top:\
+    \ 1px solid rgba(255,255,255,0.1);\n            color: #6b6b8a;\n            font-size:\
+    \ 0.9rem;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"background-pattern\"\
+    ></div>\n    <div class=\"container\">\n        <div class=\"lock-icon\">\U0001F6D2\
+    </div>\n        <h1>Demo Store</h1>\n        <p class=\"tagline\">Secure e-commerce\
+    \ powered by TLS</p>\n        \n        <div class=\"cert-badge\">\n         \
+    \   <span class=\"icon\">\U0001F510</span>\n            <div>\n              \
+    \  <div class=\"text\">TLS Secured</div>\n                <div class=\"subtext\"\
+    >Wildcard Certificate</div>\n            </div>\n        </div>\n        \n  \
+    \      <div class=\"info-grid\">\n            <div class=\"info-card\">\n    \
+    \            <div class=\"label\">Hostname</div>\n                <div class=\"\
+    value\">store.demo.lab</div>\n            </div>\n            <div class=\"info-card\"\
+    >\n                <div class=\"label\">Certificate</div>\n                <div\
+    \ class=\"value\"><span class=\"wildcard-highlight\">*.demo.lab</span></div>\n\
+    \            </div>\n            <div class=\"info-card\">\n                <div\
+    \ class=\"label\">Certificate Type</div>\n                <div class=\"value\"\
+    >Wildcard (Shared)</div>\n            </div>\n            <div class=\"info-card\"\
+    >\n                <div class=\"label\">Issuer</div>\n                <div class=\"\
+    value\">Lab CA</div>\n            </div>\n        </div>\n        \n        <div\
+    \ class=\"footer\">\n            <p>\U0001F6E1\uFE0F Secured by cert-manager with\
+    \ automated certificate lifecycle management</p>\n            <p style=\"margin-top:\
+    \ 10px;\">Shares certificate with <strong>blog.demo.lab</strong></p>\n       \
+    \ </div>\n    </div>\n</body>\n</html>\n"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store
+  namespace: cert-manager-demo
+  labels:
+    app: store
+    app.kubernetes.io/name: store
+    app.kubernetes.io/part-of: demo-apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: store
+  template:
+    metadata:
+      labels:
+        app: store
+        app.kubernetes.io/name: store
+        app.kubernetes.io/part-of: demo-apps
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: bgp-peer
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      volumes:
+      - name: html
+        configMap:
+          name: store-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: store
+  namespace: cert-manager-demo
+spec:
+  selector:
+    app: store
+  ports:
+  - port: 80
+    targetPort: 80

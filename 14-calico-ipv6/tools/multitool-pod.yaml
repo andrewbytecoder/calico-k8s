@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: multitool
+  labels:
+    app: multitool
+spec:
+  selector:
+    matchLabels:
+      app: multitool
+  template:
+    metadata:
+      labels:
+        app: multitool
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: multitool
+        image: wbitt/network-multitool:alpine-extra
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: HTTP_PORT
+          value: '8080'
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - "cat > /etc/nginx/nginx.conf << 'EOF'\nworker_processes 1;\nevents { worker_connections\
+          \ 1024; }\nhttp {\n  server {\n    listen 8080;\n    listen [::]:8080;\n\
+          \    location / {\n      return 200 'Dual-Stack Pod - IPv4 and IPv6 enabled\\\
+          n';\n      add_header Content-Type text/plain;\n    }\n  }\n}\nEOF\nnginx\
+          \ -g 'daemon off;'\n"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: multitool-dual-stack
+  labels:
+    app: multitool
+spec:
+  ipFamilyPolicy: RequireDualStack
+  ipFamilies:
+  - IPv4
+  - IPv6
+  type: ClusterIP
+  selector:
+    app: multitool
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: multitool-ipv6-only
+  labels:
+    app: multitool
+spec:
+  ipFamilyPolicy: SingleStack
+  ipFamilies:
+  - IPv6
+  type: ClusterIP
+  selector:
+    app: multitool
+  ports:
+  - port: 80
+    targetPort: 8080

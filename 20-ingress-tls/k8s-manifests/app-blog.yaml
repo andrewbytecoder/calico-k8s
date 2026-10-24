@@ -1,0 +1,154 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-html
+  namespace: cert-manager-demo
+data:
+  index.html: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\"\
+    >\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+    >\n    <title>Demo Blog | Tech Insights</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,600;1,300&family=Inter:wght@400;600&display=swap\"\
+    \ rel=\"stylesheet\">\n    <style>\n        * { margin: 0; padding: 0; box-sizing:\
+    \ border-box; }\n        \n        body { \n            font-family: 'Inter',\
+    \ sans-serif;\n            min-height: 100vh;\n            background: #faf9f7;\n\
+    \            color: #2d2d2d;\n        }\n        \n        .hero {\n         \
+    \   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);\n         \
+    \   color: #fff;\n            padding: 80px 30px;\n            text-align: center;\n\
+    \            position: relative;\n            overflow: hidden;\n        }\n \
+    \       \n        .hero::before {\n            content: '';\n            position:\
+    \ absolute;\n            top: 0;\n            left: 0;\n            right: 0;\n\
+    \            bottom: 0;\n            background: \n                radial-gradient(circle\
+    \ at 30% 70%, rgba(234, 179, 8, 0.1) 0%, transparent 50%),\n                radial-gradient(circle\
+    \ at 70% 30%, rgba(239, 68, 68, 0.08) 0%, transparent 50%);\n        }\n     \
+    \   \n        .hero-content {\n            position: relative;\n            z-index:\
+    \ 1;\n            max-width: 700px;\n            margin: 0 auto;\n        }\n\
+    \        \n        .logo {\n            font-family: 'Crimson Pro', serif;\n \
+    \           font-size: 1.2rem;\n            letter-spacing: 4px;\n           \
+    \ text-transform: uppercase;\n            color: #eab308;\n            margin-bottom:\
+    \ 30px;\n        }\n        \n        h1 {\n            font-family: 'Crimson\
+    \ Pro', serif;\n            font-size: 4rem;\n            font-weight: 300;\n\
+    \            line-height: 1.1;\n            margin-bottom: 20px;\n        }\n\
+    \        \n        .subtitle {\n            font-size: 1.1rem;\n            color:\
+    \ #9ca3af;\n            margin-bottom: 40px;\n        }\n        \n        .cert-info\
+    \ {\n            display: inline-flex;\n            align-items: center;\n   \
+    \         gap: 15px;\n            background: rgba(255,255,255,0.05);\n      \
+    \      border: 1px solid rgba(255,255,255,0.1);\n            padding: 12px 25px;\n\
+    \            border-radius: 8px;\n        }\n        \n        .cert-info .shield\
+    \ { font-size: 28px; }\n        .cert-info .details { text-align: left; }\n  \
+    \      .cert-info .title { font-weight: 600; color: #22c55e; font-size: 0.9rem;\
+    \ }\n        .cert-info .desc { font-size: 0.8rem; color: #9ca3af; }\n       \
+    \ \n        .content {\n            max-width: 800px;\n            margin: 0 auto;\n\
+    \            padding: 60px 30px;\n        }\n        \n        .section-title\
+    \ {\n            font-family: 'Crimson Pro', serif;\n            font-size: 1.8rem;\n\
+    \            color: #1a1a2e;\n            margin-bottom: 30px;\n            text-align:\
+    \ center;\n        }\n        \n        .card-grid {\n            display: grid;\n\
+    \            grid-template-columns: repeat(2, 1fr);\n            gap: 20px;\n\
+    \        }\n        \n        .card {\n            background: #fff;\n       \
+    \     border: 1px solid #e5e5e5;\n            border-radius: 12px;\n         \
+    \   padding: 25px;\n            transition: box-shadow 0.3s;\n        }\n    \
+    \    \n        .card:hover {\n            box-shadow: 0 10px 30px rgba(0,0,0,0.08);\n\
+    \        }\n        \n        .card-label {\n            font-size: 0.7rem;\n\
+    \            text-transform: uppercase;\n            letter-spacing: 1.5px;\n\
+    \            color: #9ca3af;\n            margin-bottom: 8px;\n        }\n   \
+    \     \n        .card-value {\n            font-size: 1rem;\n            color:\
+    \ #1a1a2e;\n            font-weight: 600;\n        }\n        \n        .wildcard\
+    \ {\n            background: linear-gradient(90deg, #ec4899, #f97316);\n     \
+    \       -webkit-background-clip: text;\n            -webkit-text-fill-color: transparent;\n\
+    \            background-clip: text;\n        }\n        \n        .shared-note\
+    \ {\n            margin-top: 40px;\n            padding: 25px;\n            background:\
+    \ linear-gradient(135deg, #fef3c7, #fde68a);\n            border-radius: 12px;\n\
+    \            text-align: center;\n        }\n        \n        .shared-note .icon\
+    \ { font-size: 30px; margin-bottom: 10px; }\n        .shared-note .text { color:\
+    \ #92400e; font-weight: 600; }\n        .shared-note .subtext { color: #a16207;\
+    \ font-size: 0.9rem; margin-top: 5px; }\n        \n        .footer {\n       \
+    \     text-align: center;\n            padding: 30px;\n            color: #9ca3af;\n\
+    \            font-size: 0.85rem;\n            border-top: 1px solid #e5e5e5;\n\
+    \        }\n    </style>\n</head>\n<body>\n    <div class=\"hero\">\n        <div\
+    \ class=\"hero-content\">\n            <div class=\"logo\">\u2726 Demo Blog</div>\n\
+    \            <h1>Tech Insights & Stories</h1>\n            <p class=\"subtitle\"\
+    >Exploring Kubernetes, security, and modern infrastructure</p>\n            \n\
+    \            <div class=\"cert-info\">\n                <span class=\"shield\"\
+    >\U0001F6E1\uFE0F</span>\n                <div class=\"details\">\n          \
+    \          <div class=\"title\">TLS Protected</div>\n                    <div\
+    \ class=\"desc\">Wildcard Certificate Active</div>\n                </div>\n \
+    \           </div>\n        </div>\n    </div>\n    \n    <div class=\"content\"\
+    >\n        <h2 class=\"section-title\">Certificate Details</h2>\n        \n  \
+    \      <div class=\"card-grid\">\n            <div class=\"card\">\n         \
+    \       <div class=\"card-label\">Hostname</div>\n                <div class=\"\
+    card-value\">blog.demo.lab</div>\n            </div>\n            <div class=\"\
+    card\">\n                <div class=\"card-label\">Certificate CN</div>\n    \
+    \            <div class=\"card-value\"><span class=\"wildcard\">*.demo.lab</span></div>\n\
+    \            </div>\n            <div class=\"card\">\n                <div class=\"\
+    card-label\">Certificate Type</div>\n                <div class=\"card-value\"\
+    >Wildcard (Shared)</div>\n            </div>\n            <div class=\"card\"\
+    >\n                <div class=\"card-label\">Issuer</div>\n                <div\
+    \ class=\"card-value\">Lab CA</div>\n            </div>\n        </div>\n    \
+    \    \n        <div class=\"shared-note\">\n            <div class=\"icon\">\U0001F517\
+    </div>\n            <div class=\"text\">Shared Certificate with store.demo.lab</div>\n\
+    \            <div class=\"subtext\">Both apps use the same *.demo.lab wildcard\
+    \ certificate, reducing management overhead</div>\n        </div>\n    </div>\n\
+    \    \n    <div class=\"footer\">\n        <p>Managed by cert-manager \u2022 Automated\
+    \ certificate lifecycle</p>\n    </div>\n</body>\n</html>\n"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog
+  namespace: cert-manager-demo
+  labels:
+    app: blog
+    app.kubernetes.io/name: blog
+    app.kubernetes.io/part-of: demo-apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blog
+  template:
+    metadata:
+      labels:
+        app: blog
+        app.kubernetes.io/name: blog
+        app.kubernetes.io/part-of: demo-apps
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: bgp-peer
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      volumes:
+      - name: html
+        configMap:
+          name: blog-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog
+  namespace: cert-manager-demo
+spec:
+  selector:
+    app: blog
+  ports:
+  - port: 80
+    targetPort: 80

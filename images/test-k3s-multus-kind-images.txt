@@ -1,0 +1,14 @@
+calico/apiserver:v3.30.0
+calico/cni:v3.30.0
+calico/csi:v3.30.0
+calico/goldmane:v3.30.0
+calico/kube-controllers:v3.30.0
+calico/node-driver-registrar:v3.30.0
+calico/node:v3.30.0
+calico/pod2daemon-flexvol:v3.30.0
+calico/typha:v3.30.0
+calico/whisker-backend:v3.30.0
+calico/whisker:v3.30.0
+ghcr.io/k8snetworkplumbingwg/multus-cni:snapshot
+nicolaka/netshoot:latest
+quay.io/tigera/operator:v1.38.0

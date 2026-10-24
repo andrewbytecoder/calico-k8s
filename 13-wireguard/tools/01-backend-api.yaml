@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend-api
+  labels:
+    app: backend-api
+    role: backend
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - wireguard-worker2
+  containers:
+  - name: backend
+    image: python:3.11-slim
+    imagePullPolicy: IfNotPresent
+    command:
+    - python3
+    - -c
+    - "from http.server import HTTPServer, BaseHTTPRequestHandler\nimport json\nimport\
+      \ datetime\n\nclass APIHandler(BaseHTTPRequestHandler):\n    def do_GET(self):\n\
+      \        # Simulate sensitive API responses\n        if self.path == '/api/users':\n\
+      \            data = {\n                \"users\": [\n                    {\"\
+      id\": 1, \"username\": \"admin\", \"password\": \"SuperSecret123!\", \"email\"\
+      : \"admin@company.com\"},\n                    {\"id\": 2, \"username\": \"\
+      john.doe\", \"password\": \"P@ssw0rd!\", \"email\": \"john@company.com\"},\n\
+      \                    {\"id\": 3, \"username\": \"jane.smith\", \"password\"\
+      : \"Secret456!\", \"email\": \"jane@company.com\"}\n                ],\n   \
+      \             \"db_connection\": \"postgresql://dbadmin:DbP@ss789@db.internal:5432/users\"\
+      \n            }\n        elif self.path == '/api/config':\n            data\
+      \ = {\n                \"aws_access_key\": \"AKIAIOSFODNN7EXAMPLE\",\n     \
+      \           \"aws_secret_key\": \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"\
+      ,\n                \"stripe_api_key\": \"sk_live_51ABC123DEF456GHI789\",\n \
+      \               \"database_url\": \"mysql://root:RootP@ss123@mysql.internal:3306/prod\"\
+      \n            }\n        elif self.path == '/api/health':\n            data\
+      \ = {\"status\": \"healthy\", \"timestamp\": str(datetime.datetime.now())}\n\
+      \        else:\n            data = {\"error\": \"not found\"}\n        \n  \
+      \      self.send_response(200)\n        self.send_header('Content-Type', 'application/json')\n\
+      \        self.end_headers()\n        self.wfile.write(json.dumps(data, indent=2).encode())\n\
+      \    \n    def log_message(self, format, *args):\n        pass  # Suppress logging\n\
+      \nprint(\"Backend API starting on port 8080...\")\nHTTPServer(('0.0.0.0', 8080),\
+      \ APIHandler).serve_forever()\n"
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    resources:
+      limits:
+        memory: 128Mi
+        cpu: 250m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-api
+spec:
+  selector:
+    app: backend-api
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP

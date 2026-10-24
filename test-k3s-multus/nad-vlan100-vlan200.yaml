@@ -1,0 +1,66 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: vlan100-net
+  namespace: default
+spec:
+  config: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"vlan100-net\",\n  \"type\"\
+    : \"bridge\",\n  \"bridge\": \"br-multus\",\n  \"vlan\": 100,\n  \"isGateway\"\
+    : false,\n  \"ipMasq\": false,\n  \"hairpinMode\": false,\n  \"ipam\": {\n   \
+    \ \"type\": \"host-local\",\n    \"subnet\": \"10.10.100.0/24\",\n    \"rangeStart\"\
+    : \"10.10.100.100\",\n    \"rangeEnd\": \"10.10.100.200\",\n    \"gateway\": \"\
+    10.10.100.1\"\n  }\n}\n"
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: vlan200-net
+  namespace: default
+spec:
+  config: "{\n  \"cniVersion\": \"0.3.1\",\n  \"name\": \"vlan200-net\",\n  \"type\"\
+    : \"bridge\",\n  \"bridge\": \"br-multus\",\n  \"vlan\": 200,\n  \"isGateway\"\
+    : false,\n  \"ipMasq\": false,\n  \"hairpinMode\": false,\n  \"ipam\": {\n   \
+    \ \"type\": \"host-local\",\n    \"subnet\": \"10.10.200.0/24\",\n    \"rangeStart\"\
+    : \"10.10.200.100\",\n    \"rangeEnd\": \"10.10.200.200\",\n    \"gateway\": \"\
+    10.10.200.1\"\n  }\n}\n"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-vlan-pod
+  namespace: default
+  annotations:
+    k8s.v1.cni.cncf.io/networks: vlan100-net, vlan200-net
+spec:
+  containers:
+  - name: netshoot
+    image: nicolaka/netshoot
+    imagePullPolicy: IfNotPresent
+    command:
+    - sleep
+    - infinity
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vlan-test-ds
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: vlan-test
+  template:
+    metadata:
+      labels:
+        app: vlan-test
+      annotations:
+        k8s.v1.cni.cncf.io/networks: vlan100-net, vlan200-net
+    spec:
+      containers:
+      - name: netshoot
+        image: nicolaka/netshoot
+        imagePullPolicy: IfNotPresent
+        command:
+        - sleep
+        - infinity

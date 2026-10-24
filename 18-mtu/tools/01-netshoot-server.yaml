@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: netshoot-server
+  labels:
+    app: netshoot-server
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - k01-worker3
+  containers:
+  - name: netshoot
+    image: nicolaka/netshoot
+    imagePullPolicy: IfNotPresent
+    command:
+    - /bin/sh
+    - -c
+    args:
+    - "echo \"Netshoot Server pod started\"\necho \"IP: $(hostname -i)\"\n# Keep the\
+      \ pod running\nwhile true; do\n  sleep 3600\ndone\n"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netshoot-server
+spec:
+  selector:
+    app: netshoot-server
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP

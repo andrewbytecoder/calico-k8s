@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: duplicate-pod
+  labels:
+    app: duplicate-pod
+  annotations:
+    cni.projectcalico.org/ipAddrs: '["192.168.100.10"]'
+spec:
+  containers:
+  - name: busybox
+    image: busybox:1.36
+    imagePullPolicy: IfNotPresent
+    command:
+    - sleep
+    - '3600'

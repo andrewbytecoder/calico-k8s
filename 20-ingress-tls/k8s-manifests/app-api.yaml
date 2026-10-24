@@ -1,0 +1,189 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-html
+  namespace: cert-manager-demo
+data:
+  index.html: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\"\
+    >\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\
+    >\n    <title>Demo API | Developer Portal</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap\"\
+    \ rel=\"stylesheet\">\n    <style>\n        * { margin: 0; padding: 0; box-sizing:\
+    \ border-box; }\n        \n        body { \n            font-family: 'Space Grotesk',\
+    \ sans-serif;\n            min-height: 100vh;\n            background: #0a0a0a;\n\
+    \            color: #e5e5e5;\n        }\n        \n        .grid-bg {\n      \
+    \      position: fixed;\n            top: 0;\n            left: 0;\n         \
+    \   width: 100%;\n            height: 100%;\n            background-image: \n\
+    \                linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),\n\
+    \                linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent\
+    \ 1px);\n            background-size: 50px 50px;\n            pointer-events:\
+    \ none;\n        }\n        \n        .container {\n            position: relative;\n\
+    \            max-width: 1000px;\n            margin: 0 auto;\n            padding:\
+    \ 50px 30px;\n        }\n        \n        .header {\n            display: flex;\n\
+    \            align-items: center;\n            justify-content: space-between;\n\
+    \            margin-bottom: 60px;\n            padding-bottom: 30px;\n       \
+    \     border-bottom: 1px solid #222;\n        }\n        \n        .logo {\n \
+    \           display: flex;\n            align-items: center;\n            gap:\
+    \ 12px;\n        }\n        \n        .logo-icon {\n            width: 45px;\n\
+    \            height: 45px;\n            background: linear-gradient(135deg, #22c55e,\
+    \ #10b981);\n            border-radius: 10px;\n            display: flex;\n  \
+    \          align-items: center;\n            justify-content: center;\n      \
+    \      font-size: 22px;\n        }\n        \n        .logo-text {\n         \
+    \   font-size: 1.5rem;\n            font-weight: 700;\n            color: #fff;\n\
+    \        }\n        \n        .status-badge {\n            display: flex;\n  \
+    \          align-items: center;\n            gap: 8px;\n            background:\
+    \ rgba(34, 197, 94, 0.1);\n            border: 1px solid rgba(34, 197, 94, 0.3);\n\
+    \            padding: 8px 16px;\n            border-radius: 20px;\n          \
+    \  font-size: 0.85rem;\n        }\n        \n        .status-dot {\n         \
+    \   width: 8px;\n            height: 8px;\n            background: #22c55e;\n\
+    \            border-radius: 50%;\n            animation: pulse 2s infinite;\n\
+    \        }\n        \n        @keyframes pulse {\n            0%, 100% { opacity:\
+    \ 1; }\n            50% { opacity: 0.5; }\n        }\n        \n        .hero\
+    \ {\n            text-align: center;\n            margin-bottom: 60px;\n     \
+    \   }\n        \n        h1 {\n            font-size: 3rem;\n            font-weight:\
+    \ 700;\n            margin-bottom: 15px;\n            background: linear-gradient(90deg,\
+    \ #22c55e, #3b82f6);\n            -webkit-background-clip: text;\n           \
+    \ -webkit-text-fill-color: transparent;\n            background-clip: text;\n\
+    \        }\n        \n        .description {\n            font-size: 1.15rem;\n\
+    \            color: #888;\n            max-width: 500px;\n            margin:\
+    \ 0 auto;\n        }\n        \n        .cert-section {\n            background:\
+    \ #111;\n            border: 1px solid #222;\n            border-radius: 16px;\n\
+    \            padding: 40px;\n            margin-bottom: 40px;\n        }\n   \
+    \     \n        .cert-header {\n            display: flex;\n            align-items:\
+    \ center;\n            gap: 15px;\n            margin-bottom: 30px;\n        }\n\
+    \        \n        .cert-icon {\n            font-size: 35px;\n        }\n   \
+    \     \n        .cert-title {\n            font-size: 1.3rem;\n            font-weight:\
+    \ 600;\n            color: #fff;\n        }\n        \n        .cert-subtitle\
+    \ {\n            font-size: 0.9rem;\n            color: #22c55e;\n        }\n\
+    \        \n        .cert-grid {\n            display: grid;\n            grid-template-columns:\
+    \ repeat(2, 1fr);\n            gap: 20px;\n        }\n        \n        .cert-item\
+    \ {\n            background: #0a0a0a;\n            border: 1px solid #1a1a1a;\n\
+    \            border-radius: 10px;\n            padding: 20px;\n        }\n   \
+    \     \n        .cert-item-label {\n            font-family: 'JetBrains Mono',\
+    \ monospace;\n            font-size: 0.7rem;\n            text-transform: uppercase;\n\
+    \            letter-spacing: 2px;\n            color: #666;\n            margin-bottom:\
+    \ 8px;\n        }\n        \n        .cert-item-value {\n            font-family:\
+    \ 'JetBrains Mono', monospace;\n            font-size: 0.95rem;\n            color:\
+    \ #fff;\n        }\n        \n        .dedicated {\n            color: #3b82f6;\n\
+    \            font-weight: 600;\n        }\n        \n        .highlight-box {\n\
+    \            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(34,\
+    \ 197, 94, 0.1));\n            border: 1px solid rgba(59, 130, 246, 0.2);\n  \
+    \          border-radius: 12px;\n            padding: 25px;\n            text-align:\
+    \ center;\n        }\n        \n        .highlight-box .icon { font-size: 30px;\
+    \ margin-bottom: 10px; }\n        .highlight-box .title { font-weight: 600; color:\
+    \ #3b82f6; margin-bottom: 5px; }\n        .highlight-box .text { font-size: 0.9rem;\
+    \ color: #888; }\n        \n        .code-block {\n            background: #111;\n\
+    \            border: 1px solid #222;\n            border-radius: 10px;\n     \
+    \       padding: 20px;\n            margin-top: 40px;\n            font-family:\
+    \ 'JetBrains Mono', monospace;\n            font-size: 0.85rem;\n        }\n \
+    \       \n        .code-block .comment { color: #666; }\n        .code-block .key\
+    \ { color: #22c55e; }\n        .code-block .value { color: #3b82f6; }\n      \
+    \  \n        .footer {\n            text-align: center;\n            margin-top:\
+    \ 50px;\n            padding-top: 30px;\n            border-top: 1px solid #222;\n\
+    \            color: #666;\n            font-size: 0.85rem;\n        }\n    </style>\n\
+    </head>\n<body>\n    <div class=\"grid-bg\"></div>\n    <div class=\"container\"\
+    >\n        <div class=\"header\">\n            <div class=\"logo\">\n        \
+    \        <div class=\"logo-icon\">\u26A1</div>\n                <span class=\"\
+    logo-text\">Demo API</span>\n            </div>\n            <div class=\"status-badge\"\
+    >\n                <div class=\"status-dot\"></div>\n                <span>Secured</span>\n\
+    \            </div>\n        </div>\n        \n        <div class=\"hero\">\n\
+    \            <h1>Developer API Portal</h1>\n            <p class=\"description\"\
+    >High-performance REST API with dedicated TLS certificate for enhanced security\
+    \ isolation</p>\n        </div>\n        \n        <div class=\"cert-section\"\
+    >\n            <div class=\"cert-header\">\n                <span class=\"cert-icon\"\
+    >\U0001F512</span>\n                <div>\n                    <div class=\"cert-title\"\
+    >Dedicated Certificate</div>\n                    <div class=\"cert-subtitle\"\
+    >Per-service TLS isolation</div>\n                </div>\n            </div>\n\
+    \            \n            <div class=\"cert-grid\">\n                <div class=\"\
+    cert-item\">\n                    <div class=\"cert-item-label\">Hostname</div>\n\
+    \                    <div class=\"cert-item-value\">api.demo.lab</div>\n     \
+    \           </div>\n                <div class=\"cert-item\">\n              \
+    \      <div class=\"cert-item-label\">Certificate CN</div>\n                 \
+    \   <div class=\"cert-item-value\"><span class=\"dedicated\">api.demo.lab</span></div>\n\
+    \                </div>\n                <div class=\"cert-item\">\n         \
+    \           <div class=\"cert-item-label\">Certificate Type</div>\n          \
+    \          <div class=\"cert-item-value\">Dedicated (Specific)</div>\n       \
+    \         </div>\n                <div class=\"cert-item\">\n                \
+    \    <div class=\"cert-item-label\">Issuer</div>\n                    <div class=\"\
+    cert-item-value\">Lab CA</div>\n                </div>\n            </div>\n \
+    \       </div>\n        \n        <div class=\"highlight-box\">\n            <div\
+    \ class=\"icon\">\U0001F3AF</div>\n            <div class=\"title\">Independent\
+    \ Certificate Lifecycle</div>\n            <div class=\"text\">This API uses its\
+    \ own certificate, separate from the wildcard used by other services. This provides\
+    \ better security isolation and independent rotation.</div>\n        </div>\n\
+    \        \n        <div class=\"code-block\">\n            <span class=\"comment\"\
+    ># Certificate Resource</span><br>\n            <span class=\"key\">apiVersion:</span>\
+    \ <span class=\"value\">cert-manager.io/v1</span><br>\n            <span class=\"\
+    key\">kind:</span> <span class=\"value\">Certificate</span><br>\n            <span\
+    \ class=\"key\">metadata:</span><br>\n            &nbsp;&nbsp;<span class=\"key\"\
+    >name:</span> <span class=\"value\">api-demo-lab</span><br>\n            <span\
+    \ class=\"key\">spec:</span><br>\n            &nbsp;&nbsp;<span class=\"key\"\
+    >dnsNames:</span><br>\n            &nbsp;&nbsp;&nbsp;&nbsp;- <span class=\"value\"\
+    >api.demo.lab</span><br>\n            &nbsp;&nbsp;<span class=\"key\">issuerRef:</span><br>\n\
+    \            &nbsp;&nbsp;&nbsp;&nbsp;<span class=\"key\">name:</span> <span class=\"\
+    value\">lab-ca-issuer</span>\n        </div>\n        \n        <div class=\"\
+    footer\">\n            <p>Powered by cert-manager \u2022 Automated TLS certificate\
+    \ management</p>\n        </div>\n    </div>\n</body>\n</html>\n"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: cert-manager-demo
+  labels:
+    app: api
+    app.kubernetes.io/name: api
+    app.kubernetes.io/part-of: demo-apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+        app.kubernetes.io/name: api
+        app.kubernetes.io/part-of: demo-apps
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: bgp-peer
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      volumes:
+      - name: html
+        configMap:
+          name: api-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: cert-manager-demo
+spec:
+  selector:
+    app: api
+  ports:
+  - port: 80
+    targetPort: 80

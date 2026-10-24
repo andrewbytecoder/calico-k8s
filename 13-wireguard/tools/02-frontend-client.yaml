@@ -1,0 +1,46 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-client
+  labels:
+    app: frontend-client
+    role: frontend
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app: backend-api
+        topologyKey: kubernetes.io/hostname
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - wireguard-worker
+  containers:
+  - name: frontend
+    image: curlimages/curl:latest
+    imagePullPolicy: IfNotPresent
+    command:
+    - /bin/sh
+    - -c
+    - "echo \"Frontend client starting...\"\necho \"Continuously querying backend-api\
+      \ with fake sensitive credentials...\"\necho \"\"\n\nwhile true; do\n  # Query\
+      \ users endpoint with auth header\n  curl -s -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW4iLCJyb2xlIjoic3VwZXJ1c2VyIn0.secret\"\
+      \ \\\n       -H \"X-API-Key: test_fake_api_key_for_demo_only\" \\\n       -H\
+      \ \"Cookie: session=admin_session_token_abc123\" \\\n       http://backend-api:8080/api/users\
+      \ > /dev/null\n  \n  sleep 1\n  \n  # Query config endpoint with different auth\n\
+      \  curl -s -H \"Authorization: Basic YWRtaW46UEBzc3cwcmQxMjM=\" \\\n       -H\
+      \ \"X-Internal-Token: internal_service_token_xyz789\" \\\n       http://backend-api:8080/api/config\
+      \ > /dev/null\n  \n  sleep 1\n  \n  # Health check\n  curl -s http://backend-api:8080/api/health\
+      \ > /dev/null\n  \n  sleep 1\ndone\n"
+    resources:
+      limits:
+        memory: 64Mi
+        cpu: 100m

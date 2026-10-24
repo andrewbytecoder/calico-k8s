@@ -1,0 +1,105 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  namespace: default
+  labels:
+    app: redis
+spec:
+  ports:
+  - port: 6379
+    name: redis
+  clusterIP: None
+  selector:
+    app: redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: default
+spec:
+  serviceName: redis-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      initContainers:
+      - name: init-redis
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - "set -ex\n# Extract pod ordinal from hostname (e.g., redis-0 -> 0)\nORDINAL=${HOSTNAME##*-}\n\
+          \n# If this is a replica (ordinal > 0), wait for master to be available\n\
+          if [ \"$ORDINAL\" != \"0\" ]; then\n  echo \"This is replica redis-$ORDINAL,\
+          \ waiting for master redis-0...\"\n  until redis-cli -h redis-0.redis-headless.default.svc.cluster.local\
+          \ ping; do\n    echo \"Waiting for redis-0.redis-headless to be ready...\"\
+          \n    sleep 2\n  done\n  echo \"Master redis-0 is ready!\"\nelse\n  echo\
+          \ \"This is the master redis-0, no need to wait\"\nfi\n"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6379
+          name: redis
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        command:
+        - /bin/sh
+        - -c
+        - "set -ex\n# Extract pod ordinal from hostname (e.g., redis-0 -> 0)\nORDINAL=${HOSTNAME##*-}\n\
+          \nif [ \"$ORDINAL\" = \"0\" ]; then\n  # This is the master\n  echo \"Starting\
+          \ as MASTER (redis-0)\"\n  exec redis-server \\\n    --bind 0.0.0.0 \\\n\
+          \    --protected-mode no \\\n    --replica-announce-ip ${POD_NAME}.redis-headless.default.svc.cluster.local\n\
+          else\n  # This is a replica - connect to master using headless service DNS\n\
+          \  # KEY CONCEPT: Replicas discover master via: redis-0.redis-headless.default.svc.cluster.local\n\
+          \  echo \"Starting as REPLICA (redis-$ORDINAL), replicating from redis-0.redis-headless\"\
+          \n  exec redis-server \\\n    --bind 0.0.0.0 \\\n    --protected-mode no\
+          \ \\\n    --replicaof redis-0.redis-headless.default.svc.cluster.local 6379\
+          \ \\\n    --replica-announce-ip ${POD_NAME}.redis-headless.default.svc.cluster.local\n\
+          fi\n"
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 15
+          periodSeconds: 10
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
