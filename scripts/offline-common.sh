@@ -235,7 +235,7 @@ offline_cleanup_lab() {
 
   if [[ -n "$topology_file" && -f "$topology_file" ]] && command -v containerlab >/dev/null 2>&1; then
     offline_log "Destroying containerlab topology ${topology_file}"
-    sudo containerlab destroy -t "$topology_file" >/dev/null 2>&1 || true
+    sudo containerlab destroy -c -t "$topology_file" >/dev/null 2>&1 || true
   fi
 
   if [[ -n "$cluster" ]] && command -v kind >/dev/null 2>&1; then
