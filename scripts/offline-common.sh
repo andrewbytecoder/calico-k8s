@@ -190,8 +190,38 @@ offline_wait_gateway_api() {
 offline_install_cert_manager() {
   offline_log "Installing cert-manager from local manifest"
   offline_apply_file "${OFFLINE_ROOT}/manifests/cert-manager-v1.16.2.yaml"
-  kubectl wait --for=condition=available -n cert-manager deploy/cert-manager deploy/cert-manager-cainjector deploy/cert-manager-webhook --timeout=240s || \
-    echo "Warning: cert-manager deployments are not ready yet; continuing so you can inspect the cluster."
+  kubectl wait --for=condition=available -n cert-manager \
+    deploy/cert-manager \
+    deploy/cert-manager-cainjector \
+    deploy/cert-manager-webhook \
+    --timeout=240s
+
+  offline_log "Waiting for cert-manager webhook CA injection and TLS readiness"
+  local secret_ca validating_ca mutating_ca
+  for _ in {1..120}; do
+    secret_ca="$(kubectl get secret -n cert-manager cert-manager-webhook-ca -o jsonpath='{.data.ca\.crt}' 2>/dev/null || true)"
+    validating_ca="$(kubectl get validatingwebhookconfiguration cert-manager-webhook -o jsonpath='{.webhooks[0].clientConfig.caBundle}' 2>/dev/null || true)"
+    mutating_ca="$(kubectl get mutatingwebhookconfiguration cert-manager-webhook -o jsonpath='{.webhooks[0].clientConfig.caBundle}' 2>/dev/null || true)"
+
+    if [[ -n "$secret_ca" && "$secret_ca" == "$validating_ca" && "$secret_ca" == "$mutating_ca" ]]; then
+      if kubectl create --dry-run=server -f - >/dev/null 2>&1 <<'EOF'
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cert-manager-webhook-readiness-check
+spec:
+  selfSigned: {}
+EOF
+      then
+        return 0
+      fi
+    fi
+    sleep 2
+  done
+
+  kubectl get pods -n cert-manager -o wide || true
+  kubectl get validatingwebhookconfiguration cert-manager-webhook -o yaml || true
+  offline_die "cert-manager webhook CA injection or TLS validation did not become ready in time."
 }
 
 offline_create_namespace() {
