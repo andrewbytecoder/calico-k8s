@@ -27,7 +27,9 @@ if [[ -n "$KIND_CLUSTER" ]]; then
   offline_load_kind_images "$KIND_CLUSTER" "$LAB_NAME"
   offline_install_calico "calico-cni-config/custom-resources.yaml"
   offline_apply_file "calico-cni-config/bgpconfiguration-no-lb.yaml"
-#  offline_apply_file "calico-cni-config/bgppeer.yaml"
+  offline_apply_file "calico-cni-config/bgppeer.yaml"
+#  offline_apply_file "calico-cni-config/bgpconfiguration-lb.yaml"
+
 #  offline_apply_file "k8s-manifests/lb-ippool.yaml"
 #  offline_apply_file "k8s-manifests/lb-nginx-service.yaml"
 #  offline_apply_dir "tools"
