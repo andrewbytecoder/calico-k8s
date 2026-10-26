@@ -65,6 +65,7 @@ topology:
     - endpoints: ["ceos01:eth1", "k01-control-plane:eth1"]
     - endpoints: ["ceos01:eth2", "k01-worker:eth1"]
     - endpoints: ["ceos01:eth3", "k01-worker2:eth1"]
-    # User host connected to ToR in VLAN 30
-    - endpoints: [ "user:eth4", "user:eth1" ]
-    - endpoints: [ "ubuntu:eth5", "ubuntu:eth1" ]
+    # User host connected to ToR (ceos01) in VLAN 30
+    - endpoints: [ "ceos01:eth4", "user:eth1" ]
+    # Webtop host connected to ToR (ceos01) in VLAN 30
+    - endpoints: [ "ceos01:eth5", "ubuntu:eth1" ]
