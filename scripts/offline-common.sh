@@ -29,6 +29,7 @@ offline_require_runtime() {
   local list="${OFFLINE_ROOT}/images/required-image-list.txt"
   if [[ -f "$list" ]]; then
     while IFS= read -r image; do
+      image="${image%$'\r'}"
       [[ -z "$image" || "$image" =~ ^# ]] && continue
       if ! docker image inspect "$image" >/dev/null 2>&1; then
         echo "Missing Docker image: $image" >&2
@@ -55,7 +56,7 @@ offline_image_tar_for() {
   local image="$1"
   local map="${OFFLINE_ROOT}/images/tar-map.tsv"
   [[ -f "$map" ]] || return 1
-  awk -F '\t' -v image="$image" '$1 == image { print $2; found=1; exit } END { if (!found) exit 1 }' "$map"
+  awk -F '\t' -v image="$image" '{ sub(/\r$/, "", $NF) } $1 == image { print $2; found=1; exit } END { if (!found) exit 1 }' "$map"
 }
 
 offline_load_kind_images() {
@@ -71,8 +72,8 @@ offline_load_kind_images() {
 
   offline_log "Loading offline image tar files into kind cluster ${cluster}"
   while IFS= read -r image; do
+    image="${image%$'\r'}"
     [[ -z "$image" || "$image" =~ ^# ]] && continue
-    docker image inspect "$image" >/dev/null 2>&1 || offline_die "Missing local Docker image: $image"
     tar_name="$(offline_image_tar_for "$image" || true)"
     tar_path="${OFFLINE_ROOT}/images/${tar_name}"
     echo "Loading $image"
