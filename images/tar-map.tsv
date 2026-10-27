@@ -18,6 +18,7 @@ envoyproxy/envoy:distroless-v1.37.5	envoyproxy_envoy__distroless-v1.37.5.tar
 envoyproxy/gateway:v1.7.5	envoyproxy_gateway__v1.7.5.tar
 frrouting/frr:v8.4.0	frrouting_frr__v8.4.0.tar
 ghcr.io/k8snetworkplumbingwg/multus-cni:snapshot	ghcr.io_k8snetworkplumbingwg_multus-cni__snapshot.tar
+ghcr.io/k8snetworkplumbingwg/whereabouts:v0.9.2	ghcr.io_k8snetworkplumbingwg_whereabouts__v0.9.2.tar
 ghcr.io/nginx/nginx-gateway-fabric:2.6.7	ghcr.io_nginx_nginx-gateway-fabric__2.6.7.tar
 kindest/node:v1.35.0	kindest_node__v1.35.0.tar
 networkstatic/iperf3:latest	networkstatic_iperf3__latest.tar

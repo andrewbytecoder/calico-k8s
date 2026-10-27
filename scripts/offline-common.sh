@@ -157,6 +157,18 @@ offline_install_multus() {
     echo "Warning: Multus pods are not ready yet; continuing so you can inspect the cluster."
 }
 
+offline_install_whereabouts() {
+  offline_log "Installing Whereabouts IPAM from local manifests"
+  # CRDs must be installed before the DaemonSet, otherwise the DaemonSet's
+  # RBAC/apiserver interactions fail and macvlan pods stay in ContainerCreating
+  # with "plugin whereabouts not found" / missing ippools CRD errors.
+  offline_apply_file "${OFFLINE_ROOT}/manifests/whereabouts-ippools-v0.9.2.yaml"
+  offline_apply_file "${OFFLINE_ROOT}/manifests/whereabouts-overlappingrangeipreservations-v0.9.2.yaml"
+  offline_apply_file "${OFFLINE_ROOT}/manifests/whereabouts-daemonset-v0.9.2.yaml"
+  kubectl wait --for=condition=ready pod -l app=whereabouts -n kube-system --timeout=180s || \
+    echo "Warning: Whereabouts pods are not ready yet; continuing so you can inspect the cluster."
+}
+
 offline_install_cni_plugins() {
   local cluster="$1"
   local tgz="${OFFLINE_ROOT}/app/cni-plugins-linux-amd64-v1.4.0.tgz"
@@ -165,8 +177,10 @@ offline_install_cni_plugins() {
   local nodes node
   nodes="$(sudo kind get nodes --name "$cluster")"
   for node in $nodes; do
-    docker cp "$tgz" "${node}:/tmp/cni-plugins-linux-amd64-v1.4.0.tgz"
-    docker exec "$node" sh -c 'mkdir -p /opt/cni/bin && tar -C /opt/cni/bin -xzf /tmp/cni-plugins-linux-amd64-v1.4.0.tgz'
+    echo "Installing CNI plugins in $node"
+    docker exec "$node" mkdir -p /opt/cni/bin
+    docker exec -i "$node" tar -C /opt/cni/bin -xzf - < "$tgz"
+    docker exec "$node" test -x /opt/cni/bin/macvlan || offline_die "macvlan plugin was not installed in $node"
   done
 }
 

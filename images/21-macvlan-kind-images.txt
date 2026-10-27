@@ -10,5 +10,6 @@ calico/typha:v3.30.0
 calico/whisker-backend:v3.30.0
 calico/whisker:v3.30.0
 ghcr.io/k8snetworkplumbingwg/multus-cni:snapshot
+ghcr.io/k8snetworkplumbingwg/whereabouts:v0.9.2
 nicolaka/netshoot:latest
 quay.io/tigera/operator:v1.38.0

@@ -27,6 +27,7 @@ if [[ -n "$KIND_CLUSTER" ]]; then
   offline_load_kind_images "$KIND_CLUSTER" "$LAB_NAME"
   offline_install_calico "calico-cni-config/custom-resources.yaml"
   offline_install_multus
+  offline_install_whereabouts
   offline_install_cni_plugins "$KIND_CLUSTER"
   offline_apply_file "calico-cni-config/macvlan-nad.yaml"
   offline_apply_dir "tools"

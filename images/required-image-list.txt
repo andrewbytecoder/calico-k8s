@@ -17,6 +17,7 @@ envoyproxy/envoy:distroless-v1.37.5
 envoyproxy/gateway:v1.7.5
 frrouting/frr:v8.4.0
 ghcr.io/k8snetworkplumbingwg/multus-cni:snapshot
+ghcr.io/k8snetworkplumbingwg/whereabouts:v0.9.2
 ghcr.io/nginx/nginx-gateway-fabric:2.6.7
 kindest/node:v1.35.0
 networkstatic/iperf3:latest
