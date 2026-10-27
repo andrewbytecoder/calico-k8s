@@ -34,13 +34,18 @@ if [[ -n "$KIND_CLUSTER" ]]; then
   offline_install_cert_manager
   offline_create_namespace cert-manager-demo
   offline_apply_file "tls-config/cluster-issuers.yaml"
+  kubectl wait --for=condition=Ready clusterissuer/selfsigned-issuer --timeout=180s
+  offline_apply_file "tls-config/certificates.yaml"
+  kubectl wait --for=condition=Ready certificate/lab-ca -n cert-manager --timeout=180s
+  kubectl wait --for=condition=Ready clusterissuer/lab-ca-issuer --timeout=180s
+  kubectl wait --for=condition=Ready certificate/wildcard-demo-lab certificate/api-demo-lab -n cert-manager-demo --timeout=180s
   offline_apply_file "k8s-manifests/app-api.yaml"
   offline_apply_file "k8s-manifests/app-blog.yaml"
   offline_apply_file "k8s-manifests/app-store.yaml"
-  offline_apply_file "tls-config/certificates.yaml"
   offline_apply_file "k8s-manifests/gateway.yaml"
   offline_apply_file "k8s-manifests/reference-grant.yaml"
   offline_apply_file "k8s-manifests/httproutes.yaml"
+  kubectl wait --for=condition=Programmed gateway/tls-gateway --timeout=300s
   offline_log "Kubernetes nodes"
   kubectl get nodes -o wide
   echo ""

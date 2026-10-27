@@ -385,7 +385,12 @@ This output confirms that we received a response from the nginx pod in the clust
 ![BGP LB Topology](../../images/bgp-lb.png)
 
 
+cd /home/andrew/calico-containerlab/08-calico-bgp-lb
+export KUBECONFIG=$PWD/k01.kubeconfig
 
+kubectl apply -f k8s-manifests/lb-ippool.yaml
+kubectl apply -f k8s-manifests/lb-nginx-service.yaml
+kubectl apply -f calico-cni-config/bgpconfiguration-lb.yaml
 
 ## Summary
 

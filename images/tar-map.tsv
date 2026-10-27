@@ -33,3 +33,4 @@ quay.io/tigera/operator:v1.38.0	quay.io_tigera_operator__v1.38.0.tar
 redis:7-alpine	redis__7-alpine.tar
 registry.k8s.io/dns/k8s-dns-node-cache:1.26.4	registry.k8s.io_dns_k8s-dns-node-cache__1.26.4.tar
 wbitt/network-multitool:alpine-extra	wbitt_network-multitool__alpine-extra.tar
+calico-bgp-presentation:local	nginx-ppt__local.tar

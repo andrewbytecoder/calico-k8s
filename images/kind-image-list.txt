@@ -29,3 +29,4 @@ quay.io/tigera/operator:v1.38.0
 redis:7-alpine
 registry.k8s.io/dns/k8s-dns-node-cache:1.26.4
 wbitt/network-multitool:alpine-extra
+calico-bgp-presentation:local

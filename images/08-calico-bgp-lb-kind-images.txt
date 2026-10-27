@@ -11,3 +11,4 @@ calico/whisker-backend:v3.30.0
 calico/whisker:v3.30.0
 nginx:stable
 quay.io/tigera/operator:v1.38.0
+calico-bgp-presentation:local
