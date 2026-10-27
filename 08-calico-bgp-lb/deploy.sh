@@ -12,6 +12,13 @@ KIND_CLUSTER="k01"
 KUBECONFIG_FILE="${KIND_CLUSTER}.kubeconfig"
 
 offline_require_runtime
+
+for host_port in 3000 3001; do
+  if ss -H -lnt "sport = :${host_port}" | grep -q .; then
+    offline_die "Host TCP port ${host_port} is already in use; free it or update topology.clab.yaml before deploying."
+  fi
+done
+
 offline_cleanup_lab "$TOPOLOGY_FILE" "$KIND_CLUSTER"
 
 offline_log "Deploying containerlab topology"
@@ -28,11 +35,12 @@ if [[ -n "$KIND_CLUSTER" ]]; then
   offline_install_calico "calico-cni-config/custom-resources.yaml"
   offline_apply_file "calico-cni-config/bgpconfiguration-no-lb.yaml"
   offline_apply_file "calico-cni-config/bgppeer.yaml"
-#  offline_apply_file "calico-cni-config/bgpconfiguration-lb.yaml"
 
+#  offline_apply_file "calico-cni-config/bgpconfiguration-lb.yaml"
 #  offline_apply_file "k8s-manifests/lb-ippool.yaml"
 #  offline_apply_file "k8s-manifests/lb-nginx-service.yaml"
 #  offline_apply_dir "tools"
+
   offline_log "Kubernetes nodes"
   kubectl get nodes -o wide
   echo ""
