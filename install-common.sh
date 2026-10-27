@@ -39,6 +39,7 @@ log "Loading offline Docker image tar files"
 MAP_FILE="${IMAGE_DIR}/tar-map.tsv"
 [[ -f "$MAP_FILE" ]] || die "Missing ${MAP_FILE}"
 while IFS=$'\t' read -r image tar_name; do
+  image="${image%$'\r'}"; tar_name="${tar_name%$'\r'}"
   [[ -z "${image:-}" || "$image" =~ ^# ]] && continue
   if docker image inspect "$image" >/dev/null 2>&1; then
     echo "Image already present: $image"
@@ -51,6 +52,7 @@ done < "$MAP_FILE"
 
 log "Verifying required images"
 while IFS= read -r image; do
+  image="${image%$'\r'}"
   [[ -z "$image" || "$image" =~ ^# ]] && continue
   docker image inspect "$image" >/dev/null 2>&1 || die "Missing required image after install: $image"
 done < "${IMAGE_DIR}/required-image-list.txt"
