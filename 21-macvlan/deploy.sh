@@ -31,6 +31,11 @@ if [[ -n "$KIND_CLUSTER" ]]; then
   offline_install_cni_plugins "$KIND_CLUSTER"
   offline_apply_file "calico-cni-config/macvlan-nad.yaml"
   offline_apply_dir "tools"
+  offline_log "Waiting for macvlan test workloads"
+  kubectl wait --for=condition=Ready pod/macvlan-test-pod --timeout=180s
+  kubectl rollout status daemonset/macvlan-test-ds --timeout=180s
+  kubectl get pods -l app=macvlan-test -o wide
+  kubectl get pod macvlan-test-pod -o wide
   offline_log "Kubernetes nodes"
   kubectl get nodes -o wide
   echo ""
